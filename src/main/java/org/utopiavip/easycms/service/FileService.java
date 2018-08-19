@@ -58,6 +58,7 @@ public class FileService {
             repositoryId = repositoryService.getDefaultRepoId();
         }
 
+        CmsFile file = new CmsFile();
         MultipartFile multipartFile = payload.getFile();
         long size = multipartFile.getSize();
         String fileStorageId = null;
@@ -65,13 +66,13 @@ public class FileService {
             CmsFileStorage fileStorage = new CmsFileStorage(multipartFile.getBytes());
             fileStorage = fileStorageRepository.save(fileStorage);
             fileStorageId = fileStorage.getId();
+            file.setStoreGridFS(false);
         } else {
             ObjectId objectId = gridFsTemplate.store(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
             fileStorageId = objectId.toString();
+            file.setStoreGridFS(true);
         }
 
-
-        CmsFile file = new CmsFile();
         file.setRepositoryId(repositoryId);
         file.setFolderId(folderId);
         file.setFileName(multipartFile.getOriginalFilename());
@@ -89,10 +90,11 @@ public class FileService {
         if (optional.isPresent()) {
             CmsFile file = optional.get();
 
+            String fileName = URLEncoder.encode(file.getFileName(), "utf8");
             response.setHeader("Content-type", file.getContentType());
-            response.setHeader("Content-Disposition", "inline; filename=\"" + file.getFileName() + "\"");
+            response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + "\"");
             ServletOutputStream outputStream = response.getOutputStream();
-            if (file.getSize() < _16M) {
+            if (!file.getStoreGridFS()) {
                 CmsFileStorage fileStorage = fileStorageRepository.findById(file.getFileStoreId()).get();
                 outputStream.write(fileStorage.getData());
             } else {

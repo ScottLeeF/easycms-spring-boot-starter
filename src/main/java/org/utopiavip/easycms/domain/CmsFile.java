@@ -11,6 +11,7 @@ public class CmsFile extends BaseDomain {
     private String fileName;
     private String fileType;
     private String contentType;
+    private Boolean isStoreGridFS;
 
     /**
      * 文件状态,0 回收站,1 正常, 2 上传中
@@ -106,6 +107,14 @@ public class CmsFile extends BaseDomain {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public Boolean getStoreGridFS() {
+        return isStoreGridFS;
+    }
+
+    public void setStoreGridFS(Boolean storeGridFS) {
+        isStoreGridFS = storeGridFS;
     }
 
     public Integer getStatus() {

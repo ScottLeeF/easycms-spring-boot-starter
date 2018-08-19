@@ -3,10 +3,10 @@ package org.utopiavip.easycms.util;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FilePayload {
-    MultipartFile file;
-    String repositoryId;
-    String folderId;
-    String url;
+    private MultipartFile file;
+    private String repositoryId;
+    private String folderId;
+    private String url;
 
     public MultipartFile getFile() {
         return file;
