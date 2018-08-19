@@ -1,0 +1,15 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 50Mb
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: test
+      username: root
+      password: a123456
+      authentication-database: admin
+easycms:
+  resource-domain: http://localhost:8080/
